@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Text;
 
 namespace CalculatorService
 {
@@ -11,27 +7,47 @@ namespace CalculatorService
     {
         public double Add(double a, double b)
         {
-            throw new NotImplementedException();
+            return PerformCalculationSafe(() => a + b);
         }
 
         public double Substract(double a, double b)
         {
-            throw new NotImplementedException();
+            return PerformCalculationSafe(() => a - b);
         }
 
         public double Multiply(double a, double b)
         {
-            throw new NotImplementedException();
+            return PerformCalculationSafe(() => a * b);
         }
 
         public double Divide(double a, double b)
         {
-            throw new NotImplementedException();
+            return PerformCalculationSafe(() => a / b);
         }
 
         public double Sqrt(double a)
         {
-            throw new NotImplementedException();
+            return PerformCalculationSafe(() => Math.Sqrt(a));
+        }
+
+        // Internals
+
+        private double PerformCalculationSafe(Func<double> calculation)
+        {
+            double result = calculation();
+
+            if (double.IsNaN(result))
+            {
+                CalculationFault calculationFault = new CalculationFault("Result is NaN.");
+                throw new FaultException<CalculationFault>(calculationFault);
+            }
+            if (double.IsInfinity(result))
+            {
+                CalculationFault calculationFault = new CalculationFault("Result is infinity. Possible division by zero or overflow.");
+                throw new FaultException<CalculationFault>(calculationFault);
+            };
+            
+            return result;
         }
     }
 }
