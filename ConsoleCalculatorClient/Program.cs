@@ -21,12 +21,12 @@ namespace ConsoleCalculatorClient
             { OperationKind.Sqrt,  (arguments) => CalculatorClient.Sqrt(arguments[0]) }
         };
 
-        private static readonly string Help =
-            "Usage:"+
-            "\t<operation> <arguments>"+
-            "Operations:"+
+        private const string Help = 
+            "Usage:" + 
+            "\t<operation> <arguments>" + 
+            "Operations:" + 
             "\t+, -, /, *, sqrt";
-        
+
         public static void Main(string[] args)
         {
             CalculatorArgumentsParser argumentsParser = new CalculatorArgumentsParser();
@@ -34,10 +34,8 @@ namespace ConsoleCalculatorClient
             PerformCalculation(operationInfo);
         }
 
-        private static bool PerformCalculation(OperationInfo operationInfo)
+        private static void PerformCalculation(OperationInfo operationInfo)
         {
-            bool result = true;
-
             if (operationInfo.OperationKind != OperationKind.Invalid)
             {
                 try
@@ -47,17 +45,17 @@ namespace ConsoleCalculatorClient
                 }
                 catch (FaultException<CalculationFault> e)
                 {
-                    Console.WriteLine($"Error: {e.Detail.Message}");
-                    result = false;
+                    Console.WriteLine($"{e.Detail.Message}");
+                }
+                catch (CommunicationException)
+                {
+                    Console.WriteLine("Connection error");
                 }
             }
             else
             {                
                 DislpayHelp();
-                result = false;
             }
-
-            return result;
         }
 
         private static void DislpayHelp()
