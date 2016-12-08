@@ -4,14 +4,17 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using WcfService.Fault;
 
 namespace WcfService
-{
- 
+{ 
     [ServiceContract]
     public interface IService
     {
         [OperationContract]
+
+    
+
         double Add(double a, double b);
 
         [OperationContract]
@@ -21,32 +24,11 @@ namespace WcfService
         double Multiply(double a, double b);
 
         [OperationContract]
+        [FaultContract(typeof(DividedByZeroFault))]
         double Divide(double a, double b);
 
         [OperationContract]
+        [FaultContract(typeof(InvalidRootOperandFault))]
         double Sqrt(double a);
-
     }
-
-    
-    /*[DataContract]
-    public class CompositeType
-    {
-        bool boolValue = true;
-        string stringValue = "Hello ";
-
-        [DataMember]
-        public bool BoolValue
-        {
-            get { return boolValue; }
-            set { boolValue = value; }
-        }
-
-        [DataMember]
-        public string StringValue
-        {
-            get { return stringValue; }
-            set { stringValue = value; }
-        }
-    }*/
 }

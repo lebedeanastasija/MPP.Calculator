@@ -8,11 +8,103 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TestConsoleApplication.CalculatorService {
+namespace CalculatorConsoleClient.ServiceReference1 {
+    using System.Runtime.Serialization;
+    using System;
     
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DividedByZeroFault", Namespace="http://schemas.datacontract.org/2004/07/WcfService.Fault")]
+    [System.SerializableAttribute()]
+    public partial class DividedByZeroFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string errorMessageField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string errorMessage {
+            get {
+                return this.errorMessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.errorMessageField, value) != true)) {
+                    this.errorMessageField = value;
+                    this.RaisePropertyChanged("errorMessage");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="InvalidRootOperandFault", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
+    [System.SerializableAttribute()]
+    public partial class InvalidRootOperandFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string errorMessageField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string errorMessage {
+            get {
+                return this.errorMessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.errorMessageField, value) != true)) {
+                    this.errorMessageField = value;
+                    this.RaisePropertyChanged("errorMessage");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CalculatorService.IService")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference1.IService")]
     public interface IService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/Add", ReplyAction="http://tempuri.org/IService/AddResponse")]
@@ -34,12 +126,14 @@ namespace TestConsoleApplication.CalculatorService {
         System.Threading.Tasks.Task<double> MultiplyAsync(double a, double b);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/Divide", ReplyAction="http://tempuri.org/IService/DivideResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(CalculatorConsoleClient.ServiceReference1.DividedByZeroFault), Action="http://tempuri.org/IService/DivideDividedByZeroFaultFault", Name="DividedByZeroFault", Namespace="http://schemas.datacontract.org/2004/07/WcfService.Fault")]
         double Divide(double a, double b);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/Divide", ReplyAction="http://tempuri.org/IService/DivideResponse")]
         System.Threading.Tasks.Task<double> DivideAsync(double a, double b);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/Sqrt", ReplyAction="http://tempuri.org/IService/SqrtResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(CalculatorConsoleClient.ServiceReference1.InvalidRootOperandFault), Action="http://tempuri.org/IService/SqrtInvalidRootOperandFaultFault", Name="InvalidRootOperandFault", Namespace="http://schemas.datacontract.org/2004/07/WcfService")]
         double Sqrt(double a);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/Sqrt", ReplyAction="http://tempuri.org/IService/SqrtResponse")]
@@ -47,12 +141,12 @@ namespace TestConsoleApplication.CalculatorService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IServiceChannel : TestConsoleApplication.CalculatorService.IService, System.ServiceModel.IClientChannel {
+    public interface IServiceChannel : CalculatorConsoleClient.ServiceReference1.IService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class ServiceClient : System.ServiceModel.ClientBase<TestConsoleApplication.CalculatorService.IService>, TestConsoleApplication.CalculatorService.IService {
+    public partial class ServiceClient : System.ServiceModel.ClientBase<CalculatorConsoleClient.ServiceReference1.IService>, CalculatorConsoleClient.ServiceReference1.IService {
         
         public ServiceClient() {
         }

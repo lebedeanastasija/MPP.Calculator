@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
-using TestConsoleApplication.CalculatorNamespace;
+using CalculatorConsoleClient.ServiceReference1;
 
 namespace TestConsoleApplication
 {
-    
+
     class Program
     {
         private const int INIT_ACTION = -1;
@@ -30,30 +30,31 @@ namespace TestConsoleApplication
             double firstOperand = 0;
             double secondOperand = 0;
             double result = 0;
+            bool successfulCalculation;
 
             Console.WriteLine("HELLO, I'M CALCULATOR. LET'S CALC SOMETHING! :)\n");
             while (action != EXIT_ACTION)
             {
                 ShowMenu();
 
-                if((int.TryParse(Console.ReadLine(), out action)) && actions.Contains(action))
+                if ((int.TryParse(Console.ReadLine(), out action)) && actions.Contains(action))
                 {
                     if (action != EXIT_ACTION)
                     {
                         Console.Write("first operand: ");
-                        if (! double.TryParse(Console.ReadLine(), out firstOperand))                        
+                        if (!double.TryParse(Console.ReadLine(), out firstOperand))
                         {
                             ShowError("Value is not correct :(");
                             action = INIT_ACTION;
                             continue;
                         }
 
-                        if(action != SQRT_ACTION)
-                        { 
+                        if (action != SQRT_ACTION)
+                        {
                             Console.Write("second operand: ");
                             if (!double.TryParse(Console.ReadLine(), out secondOperand))
                             {
-                                ShowError("Value is not correct :(");                                             
+                                ShowError("Value is not correct :(");
                                 action = INIT_ACTION;
                                 continue;
                             }
@@ -61,40 +62,43 @@ namespace TestConsoleApplication
 
                         if (action == SQRT_ACTION)
                         {
-                            HandleAction(action, firstOperand, out result);
-                        } 
+                            successfulCalculation = HandleAction(action, firstOperand, out result);
+                        }
                         else
                         {
-                            HandleAction(action, firstOperand, secondOperand, out result);
+                            successfulCalculation = HandleAction(action, firstOperand, secondOperand, out result);
                         }
 
-                        ShowResult(result);
+                        if (successfulCalculation)
+                        {
+                            ShowResult(result);
+                        }
                     }
                 }
                 else
                 {
                     ShowError("Command is unknonw :(");
                     action = INIT_ACTION;
-                    continue;            
+                    continue;
                 }
             }
 
             client.Close();
-            Console.WriteLine("\nBye, press any key to exit...");            
+            Console.WriteLine("\nBye, press any key to exit...");
             Console.Read();
         }
 
         public static void ShowMenu()
         {
             Console.Write(
-                "Write the number of command to do:\n\n" +                              
-                "0 - Exit\n" +                             
-                "1 - Add\n" +                              
-                "2 - Substract\n" +                              
-                "3 - Multiply\n" +                              
-                "4 - Divide\n" +                              
-                "5 - Sqrt\n\n" +                             
-                "----------------------------------\n" +                              
+                "Write the number of command to do:\n\n" +
+                "0 - Exit\n" +
+                "1 - Add\n" +
+                "2 - Substract\n" +
+                "3 - Multiply\n" +
+                "4 - Divide\n" +
+                "5 - Sqrt\n\n" +
+                "----------------------------------\n" +
                 "command: ");
         }
 
@@ -124,8 +128,9 @@ namespace TestConsoleApplication
             actions.Add(SQRT_ACTION);
         }
 
-        public static void HandleAction(int action, double firstOperand, double secondOperand, out double result)
+        public static bool HandleAction(int action, double firstOperand, double secondOperand, out double result)
         {
+            bool successfulCalculation = true;
             result = 0;
             switch (action)
             {
@@ -143,25 +148,30 @@ namespace TestConsoleApplication
                     {
                         result = client.Divide(firstOperand, secondOperand);
                     }
-                    catch(FaultException<DividedByZeroFault> ex)
+                    catch (FaultException<DividedByZeroFault> ex)
                     {
                         ShowError(ex.Detail.errorMessage);
+                        successfulCalculation = false;
                     }
                     break;
             }
+            return successfulCalculation;
         }
 
-        public static void HandleAction(int action, double firstOperand, out double result)
+        public static bool HandleAction(int action, double firstOperand, out double result)
         {
+            bool successfulCalculation = true;
             try
             {
                 result = client.Sqrt(firstOperand);
             }
-            catch(FaultException<InvalidRootOperandFault> ex)
+            catch (FaultException<InvalidRootOperandFault> ex)
             {
                 ShowError(ex.Detail.errorMessage);
+                successfulCalculation = false;
             }
             result = 0;
+            return successfulCalculation;
         }
     }
 }

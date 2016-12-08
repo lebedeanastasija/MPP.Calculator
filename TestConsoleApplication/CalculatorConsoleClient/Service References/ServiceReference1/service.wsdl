@@ -4,6 +4,8 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/WcfService.Fault" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/WcfService" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IService_Add_InputMessage">
@@ -30,11 +32,17 @@
   <wsdl:message name="IService_Divide_OutputMessage">
     <wsdl:part name="parameters" element="tns:DivideResponse" />
   </wsdl:message>
+  <wsdl:message name="IService_Divide_DividedByZeroFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/WcfService.Fault" name="detail" element="q1:DividedByZeroFault" />
+  </wsdl:message>
   <wsdl:message name="IService_Sqrt_InputMessage">
     <wsdl:part name="parameters" element="tns:Sqrt" />
   </wsdl:message>
   <wsdl:message name="IService_Sqrt_OutputMessage">
     <wsdl:part name="parameters" element="tns:SqrtResponse" />
+  </wsdl:message>
+  <wsdl:message name="IService_Sqrt_InvalidRootOperandFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/WcfService" name="detail" element="q2:InvalidRootOperandFault" />
   </wsdl:message>
   <wsdl:portType name="IService">
     <wsdl:operation name="Add">
@@ -52,10 +60,12 @@
     <wsdl:operation name="Divide">
       <wsdl:input wsaw:Action="http://tempuri.org/IService/Divide" message="tns:IService_Divide_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IService/DivideResponse" message="tns:IService_Divide_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IService/DivideDividedByZeroFaultFault" name="DividedByZeroFaultFault" message="tns:IService_Divide_DividedByZeroFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="Sqrt">
       <wsdl:input wsaw:Action="http://tempuri.org/IService/Sqrt" message="tns:IService_Sqrt_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IService/SqrtResponse" message="tns:IService_Sqrt_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IService/SqrtInvalidRootOperandFaultFault" name="InvalidRootOperandFaultFault" message="tns:IService_Sqrt_InvalidRootOperandFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IService" type="tns:IService">
@@ -95,6 +105,9 @@
       <wsdl:output>
         <soap:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="DividedByZeroFaultFault">
+        <soap:fault use="literal" name="DividedByZeroFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="Sqrt">
       <soap:operation soapAction="http://tempuri.org/IService/Sqrt" style="document" />
@@ -104,6 +117,9 @@
       <wsdl:output>
         <soap:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="InvalidRootOperandFaultFault">
+        <soap:fault use="literal" name="InvalidRootOperandFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="Service">
